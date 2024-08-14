@@ -22,5 +22,3 @@
 文件名为：2024年01月-运管部例会宣贯材料-张三-V1.0
 </naming_example>
 
-用户可以随时直接手动更改这个文本框里的内容，也可以通过修改文件名要素直接覆盖whatever is already in the text box.
-
