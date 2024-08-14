@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>业务文件命名规范</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.8;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 300px;
+            padding: 5px;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+        .filename {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>业务文件命名规范</h1>
+
+    <p>本页面所有数据均在本地处理，不会上传到云端，请您放心使用。</p>
+    
+    <div class="input-group">
+        <label for="time">时间（必填）：</label>
+        <input type="text" id="time" value="">
+        <span>请按需手动修改时间</span>
+        <div id="time-error" class="error"></div>
+    </div>
+
+    <div class="input-group">
+        <label for="organization">组织（可选）：</label>
+        <input type="text" id="organization">
+        <span>请填写部门/小组/板块/事业部等组织名</span>
+    </div>
+
+    <div class="input-group">
+        <label for="project">工作/项目名称（必填）：</label>
+        <input type="text" id="project">
+        <span>如：例会、例会宣贯材料、董事会材料等</span>
+        <div id="project-error" class="error"></div>
+    </div>
+
+    <div class="input-group">
+        <label for="filetype">文件类型（可选）：</label>
+        <input type="text" id="filetype">
+        <span>如：纪要、通知、制度、蓝图、画像等</span>
+    </div>
+
+    <div class="input-group">
+        <label for="creator">创建/负责人姓名（可选）：</label>
+        <input type="text" id="creator">
+    </div>
+
+    <div class="input-group">
+        <label for="version">版本号（可选）：</label>
+        <input type="number" id="version" value="1" min="1" step="1">
+    </div>
+
+    <div class="input-group">
+        <label for="remark">备注（可选）：</label>
+        <input type="text" id="remark">
+    </div>
+
+    <div class="filename">
+        <label for="filename">文件名：</label>
+        <input type="text" id="filename" readonly>
+    </div>
+
+    <script>
+        function initialize() {
+            // 初始化时间
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const formattedTime = now.getFullYear() + '年' + (month < 10 ? '0' + month : month) + '月';
+            document.getElementById('time').value = formattedTime;
+
+            // 初始化文件名
+            generateFilename();
+        }
+
+        function generateFilename() {
+            const time = document.getElementById('time').value.trim();
+            const organization = document.getElementById('organization').value.trim();
+            const project = document.getElementById('project').value.trim();
+            const filetype = document.getElementById('filetype').value.trim();
+            const creator = document.getElementById('creator').value.trim();
+            const version = 'V' + document.getElementById('version').value.trim() + '.0';
+            const remark = document.getElementById('remark').value.trim();
+
+            let error = '';
+
+            if (!time) {
+                error = '请填写时间！';
+                document.getElementById('time-error').textContent = error;
+            } else {
+                document.getElementById('time-error').textContent = '';
+            }
+
+            if (!project) {
+                error = '请填写工作/项目名称！';
+                document.getElementById('project-error').textContent = error;
+            } else {
+                document.getElementById('project-error').textContent = '';
+            }
+
+            if (!error) {
+                let filename = time;
+                if (organization) filename += '-' + organization;
+                if (project) filename += project;
+                if (filetype) filename += filetype;
+                if (creator) filename += '-' + creator;
+                if (version) filename += '-' + version;
+                if (remark) filename += '-' + remark;
+
+                document.getElementById('filename').value = filename;
+            }
+        }
+
+        document.querySelectorAll('input, select').forEach((element) => {
+            element.addEventListener('input', generateFilename);
+        });
+
+        initialize();
+    </script>
+</body>
+</html>
